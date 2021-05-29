@@ -23,6 +23,16 @@ int main() {
 
     for (int i = 0; i < entries.size(); i++) {
         for (int j = i + 1; j < entries.size(); j++) {
+            if (entries[i] + entries[j] == target) {
+                cout << entries[i] << endl;
+                cout << entries[j] << endl;
+                cout << entries[i] * entries[j] << endl;
+            }
+        }
+    }
+
+    for (int i = 0; i < entries.size(); i++) {
+        for (int j = i + 1; j < entries.size(); j++) {
             for (int k = j + 1; k < entries.size(); k++) {
                 if (entries[i] + entries[j] + entries[k] == target) {
                     cout << entries[i] << endl;
