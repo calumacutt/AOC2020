@@ -1,21 +1,26 @@
-import System.IO  
-import Control.Monad
+convStrToInt :: [String] -> [Integer]
+convStrToInt [] = []
+convStrToInt (x:xs) = (read x :: Integer) : convStrToInt(xs)
 
-checkWhereNumberInList :: ([Integer], Integer, Integer) -> (Integer, Integer)
-checkWhereNumberInList ([], n, t) = (-1, 0)
-checkWhereNumberInList ((x:xs), n, t) = if (x == t) then (n, t) else checkWhereNumberInList (xs, n + 1, t)
+isElementOf :: Integer -> [Integer] -> Bool
+isElementOf _ [] = False
+isElementOf e (x:xs) = (e == x) || (isElementOf e xs)
 
-turnStringsIntoInts :: [String] -> [Integer]
-turnStringsIntoInts [] = []
-turnStringsIntoInts (x:xs) = (read x :: Integer) : turnStringsIntoInts(xs)
+partA :: Integer -> [Integer] -> Integer
+partA _ [] = -1
+partA e (x:xs) = if (isElementOf (e - x) xs)
+    then (e - x) * x
+    else partA e xs
 
-mapToComplement :: [Integer] -> [(Integer, Integer)]
-mapToComplement [] = []
-mapToComplement (x:xs) = checkWhereNumberInList (xs, 0, 2020 - x) : mapToComplement xs
+partB :: [Integer] -> Integer
+partB [] = -1
+partB (x:xs) = if (partA (2020 - x) xs) /= -1
+    then x * (partA (2020 - x) xs)
+    else partB xs
 
 main :: IO ()
 main = do
     listOfStrings <- lines <$> readFile "input.txt"
-    let listOfIntegers = turnStringsIntoInts listOfStrings
-    let listOfComplementIndexes = mapToComplement listOfIntegers
-    print listOfComplementIndexes
+    let listOfIntegers = convStrToInt listOfStrings
+    print (partA 2020 listOfIntegers)
+    print (partB listOfIntegers)
