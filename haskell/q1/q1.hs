@@ -22,5 +22,7 @@ main :: IO ()
 main = do
     listOfStrings <- lines <$> readFile "input.txt"
     let listOfIntegers = convStrToInt listOfStrings
-    print (partA 2020 listOfIntegers)
-    print (partB listOfIntegers)
+    -- print (partA 2020 listOfIntegers)
+    -- print (partB listOfIntegers)
+    print [x * y | x <- listOfIntegers, y <- listOfIntegers, x + y == 2020]
+    print [x * y * z | x <- listOfIntegers, y <- listOfIntegers, z <- listOfIntegers, x + y + z == 2020]
