@@ -1,5 +1,17 @@
-run: q2.exe
-	.\q2.exe
+run: main.exe
+	.\main.exe
 
-q2.exe: q2.cpp
-	g++ -o q2.exe q2.cpp
+clean:
+	del main.exe
+	del main.o 
+	del fileReader.o
+
+main.exe: main.o fileReader.o
+	g++ -o main.exe main.o fileReader.o
+
+main.o: main.cpp fileReader.h
+	g++ -c main.cpp
+
+fileReader.o: fileReader.h
+	g++ -c fileReader.cpp
+
