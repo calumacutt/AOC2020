@@ -3,7 +3,6 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <tuple>
 #include "fileReader.h"
 
 using namespace std;
@@ -12,7 +11,7 @@ using namespace std;
 // Returns -1 if no numbers are <= target
 int binarySearch(vector<int> entries, int target, int lower, int upper) {
     int check;
-    if (entries[upper] < target) {
+    if (entries[upper] <= target) {
         return upper;
     }
     if (entries[lower] > target) {
@@ -47,25 +46,27 @@ int find2Complements(vector<int> entries, int sum, int lower, int upper) {
     return -1;
 }
 
+// Returns the highest possible entry that could be used, assuming all the other values used are the lowest available
+// Returns -1 if there are no 
+int findUpperBound(vector<int> entries, int sum, int count, int lower, int upper) {
+    int lowestValues = 0;
+    for (int i = lower; i < lower + count - 1; i++) {
+        lowestValues += entries[i];
+    }
+    return binarySearch(entries, sum - lowestValues, lower + count, upper);
+}
+
 // Returns the product of the #count numbers that make up sum
 // Returns -1 if there is no solution
-// Only searches from [lower] upwards
 int findNComplements(vector<int> entries, int sum, int count, int lower, int upper) {
-    int result;
     if (count == 2) {
         return find2Complements(entries, sum, lower, upper);
     }
 
-    // int lowestValues = 0;
-    // for (int i = lower; i < lower + count - 1; i++) {
-    //     lowestValues += entries[i];
-    // }
-    // result = binarySearch(entries, sum - lowestValues, lower + count, upper);
-    // if (result != -1) {
-    //     upper = result;
-    // }
+    upper = findUpperBound(entries, sum, count, lower, upper);
 
-    for (int i = lower; i < entries.size(); i++) {
+    int result;
+    for (int i = lower; i < upper - count + 2; i++) {
         result = findNComplements(entries, sum - entries[i], count - 1, i + 1, upper);
         if (result != -1) {
             return entries[i] * result;
